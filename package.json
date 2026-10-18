@@ -1,0 +1,66 @@
+{
+  "name": "ui-patterns-alloy",
+  "author": "Michael Gutensohn",
+  "version": "1.0.0",
+  "keywords": [
+    "pebble-app"
+  ],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "UI Patterns",
+    "uuid": "c763b160-66d3-4fb3-a4fe-19f269c22562",
+    "projectType": "moddable",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "emery",
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "TICK_BLACK",
+          "file": "images/tick_black.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "TICK_WHITE",
+          "file": "images/tick_white.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "CONFIRM",
+          "file": "images/confirm.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "CROSS",
+          "file": "images/cross.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "TICK",
+          "file": "images/tick.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "WARNING",
+          "file": "images/warning.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "CONFIG_REQUIRED",
+          "file": "images/config-required.png"
+        }
+      ]
+    }
+  }
+}

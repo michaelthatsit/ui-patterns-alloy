@@ -1,0 +1,20 @@
+{
+	"include": [
+		"$(MODDABLE)/examples/manifest_mod.json"
+	],
+	"config": {
+		"creation": { "stack": 5120, "slot": 45056, "chunk": 21504 }
+	},
+	"modules": {
+		"piu/Controller": "./modules/piuController",
+		"piu/View": "./modules/piuView",
+		"Menu": "./modules/Menu",
+		"StatusBar": "./modules/StatusBar",
+		"*": [
+			"./assets",
+			"./main",
+			"./layers/*",
+			"./windows/*"
+		]
+	}
+}

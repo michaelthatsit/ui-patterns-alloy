@@ -1,0 +1,40 @@
+import { PBL_IF_COLOR_ELSE, GColor } from "assets";
+import { ProgressLayer } from "progress_layer";
+import Timer from "timer";
+import View from "piu/View";
+
+export const PROGRESS_LAYER_WINDOW_DELTA = 33;
+export const PROGRESS_LAYER_WINDOW_WIDTH = 80;
+
+class ProgressLayerWindowBehavior extends View.Behavior {
+	// window_appear
+	onDisplaying(container) {
+		this.progress = 0;
+		this.timer = Timer.repeat(() => {
+			this.progress += (this.progress < 100) ? 1 : -100;
+			container.first.delegate("setProgress", this.progress);
+		}, PROGRESS_LAYER_WINDOW_DELTA);
+	}
+	// window_disappear
+	onUndisplaying(container) {
+		Timer.clear(this.timer);
+		super.onUndisplaying(container);
+	}
+}
+
+const ProgressLayerContainer = Container.template($ => ({
+	skin: new Skin({ fill: PBL_IF_COLOR_ELSE(GColor.LightGray, GColor.White) }), Behavior: $.constructor.Behavior,
+	contents: [
+		ProgressLayer({
+			width: PROGRESS_LAYER_WINDOW_WIDTH, progress: 0, cornerRadius: 2,
+			foregroundColor: GColor.White, backgroundColor: GColor.Black,
+		}, {
+			left: (screen.width - PROGRESS_LAYER_WINDOW_WIDTH) >> 1, top: 80, width: PROGRESS_LAYER_WINDOW_WIDTH, height: 6,
+		}),
+	],
+}));
+
+export default class ProgressLayerWindow extends View {
+	static get Behavior() { return ProgressLayerWindowBehavior }
+	get Template() { return ProgressLayerContainer }
+}

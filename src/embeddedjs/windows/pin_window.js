@@ -10,6 +10,12 @@ export const PIN_WINDOW_SIZE = { w: 128, h: 34 };
 
 const textStyle = textLayerStyle(FONT_KEY.GOTHIC_18_BOLD, GColor.Black, "center");
 
+// The selection layer is centred; the texts keep their distances to it from the
+// original 168 px screen (cells at 67: title at 30, sub text at 115).
+const SELECTION_TOP = (screen.height - PIN_WINDOW_SIZE.h) >> 1;
+const MAIN_TEXT_TOP = SELECTION_TOP - 37;
+const SUB_TEXT_TOP = SELECTION_TOP + PIN_WINDOW_SIZE.h + 14;
+
 function selectionCallbacks(view) {
 	const pin = view.pin;
 	return {
@@ -39,9 +45,9 @@ const PinWindowContainer = Container.template($ => ({
 	skin: skins.white, Behavior: $.constructor.Behavior,
 	contents: [
 		// Main TextLayer
-		Label($, { left: 0, right: 0, top: 30, bottom: 0, style: textStyle, string: "PIN Required" }),
+		Label($, { left: 0, right: 0, top: MAIN_TEXT_TOP, bottom: 0, style: textStyle, string: "PIN Required" }),
 		// Sub TextLayer
-		Text($, { left: 5, right: 5, top: 115, bottom: 10, style: textStyle, string: "Enter your PIN to continue" }),
+		Text($, { left: 5, right: 5, top: SUB_TEXT_TOP, bottom: 10, style: textStyle, string: "Enter your PIN to continue" }),
 		// Selection layer, centred
 		SelectionLayer({
 			numCells: PIN_WINDOW_NUM_CELLS,
@@ -51,7 +57,7 @@ const PinWindowContainer = Container.template($ => ({
 			inactiveBackgroundColor: GColor.DarkGray,
 			callbacks: selectionCallbacks($),
 		}, {
-			left: (screen.width - PIN_WINDOW_SIZE.w) >> 1, top: (screen.height - PIN_WINDOW_SIZE.h) >> 1,
+			left: (screen.width - PIN_WINDOW_SIZE.w) >> 1, top: SELECTION_TOP,
 			width: PIN_WINDOW_SIZE.w, height: PIN_WINDOW_SIZE.h,
 		}),
 		// Status bar: clear background, black text

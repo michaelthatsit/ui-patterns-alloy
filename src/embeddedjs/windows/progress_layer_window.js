@@ -29,7 +29,8 @@ const ProgressLayerContainer = Container.template($ => ({
 			width: PROGRESS_LAYER_WINDOW_WIDTH, progress: 0, cornerRadius: 2,
 			foregroundColor: GColor.White, backgroundColor: GColor.Black,
 		}, {
-			left: (screen.width - PROGRESS_LAYER_WINDOW_WIDTH) >> 1, top: 80, width: PROGRESS_LAYER_WINDOW_WIDTH, height: 6,
+			// 4 px above the middle, as the C code's 80 is on the 168 px screen.
+			left: (screen.width - PROGRESS_LAYER_WINDOW_WIDTH) >> 1, top: (screen.height >> 1) - 4, width: PROGRESS_LAYER_WINDOW_WIDTH, height: 6,
 		}),
 	],
 }));

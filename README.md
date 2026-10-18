@@ -29,34 +29,38 @@ All frames at once: [emery](screenshots/emery/all.png), [gabbro](screenshots/gab
 
 The C original was built for emery and gabbro with SDK 4.33.1, driven through
 every screen in the emulators, and screenshotted. This app was put through the
-same steps and the PNGs diffed pixel by pixel. Every static screen is identical
-on emery; on gabbro everything is identical except a handful of blended pixels
-along the round action bar's anti-aliased edge (`screenshots/` holds this
-app's frames). The behaviours match the C code: Up/Down with repeat while held,
-Select and Back per window, the checkbox and radio submit logs, the PIN
-callback (`Pin was 2 9 0`), the timers and animations with the C durations.
+same steps and the PNGs diffed pixel by pixel. The menus, the checkbox and
+radio lists, the message dialog, the list with its hint and the text
+animation are identical on emery, pixel for pixel; on gabbro the same, except
+a handful of blended pixels along the round action bar's anti-aliased edge.
+The five screens below differ from the C app only where it was adapted
+(`screenshots/` holds this app's frames). The behaviours match the C code:
+Up/Down with repeat while held, Select and Back per window, the checkbox and
+radio submit logs, the PIN callback (`Pin was 2 9 0`), the timers and
+animations with the C durations.
 
 Geometry that the C SDK computes internally was measured on the emulators,
 not guessed: MenuLayer cells and scrolling, the action bar and its icon
 positions, the status bar, the fonts the firmware substitutes on these
 displays. Each measured value is named where it is used.
 
-### Kept literal from the C source
+### Adapted for the larger screens
 
-The C windows hard-code a few positions for the original 144x168 screen. The
-C app does the same thing when built for emery or gabbro, so they are kept as
-written and look the same here:
+The C windows hard-code a few positions for the original 144x168 screen; built
+as-is for emery or gabbro they put text over the icons and cells. Here those
+positions are anchored to what they sit next to, so the screens look as the
+original does:
 
-| Window | Constant | Effect on 200x228 / 260x260 |
+| Window | C constant | Here |
 | --- | --- | --- |
-| Choice dialog | label `top: 112` | the label overlaps the icon |
-| App config prompt | body `top: 125` | the body overlaps the icon |
-| List message | hint `top: 140` | the hint covers the last row |
-| PIN entry | sub text `top: 115` | the cells cover the sub text |
-| Progress bar | `PROGRESS_BAR_WINDOW_SIZE.w = 144` | the line stops at 144 of 200 px |
+| Choice dialog | label `top: 112` | the bottom 56 px, the band the icon is inset by |
+| App config prompt | body `top: 125` | 2 px under the centred icon |
+| PIN entry | title `top: 30`, sub text `top: 115` | 37 px above and 14 px below the centred cells |
+| Progress bar | width `144` | the screen's width (the C comment: "system default") |
+| Progress layer | `top: 80` | 4 px above the middle |
 
-Each is a one-constant change in its window module if a layout for the larger
-screens is wanted instead.
+The list hint keeps the C position (top 140 over a 150 px menu): the original
+covers the last row the same way.
 
 ## Layout
 

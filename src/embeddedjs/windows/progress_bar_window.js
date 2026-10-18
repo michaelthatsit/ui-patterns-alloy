@@ -4,7 +4,7 @@ import { StatusBar } from "StatusBar";
 import Timer from "timer";
 import View from "piu/View";
 
-export const PROGRESS_BAR_WINDOW_SIZE = { w: 144, h: 1 }; // System default
+export const PROGRESS_BAR_WINDOW_SIZE = { w: screen.width, h: 1 }; // System default (144 in the C code: the original screen's width)
 export const PROGRESS_BAR_WINDOW_DELTA = 33;
 
 class ProgressBarBehavior extends View.Behavior {

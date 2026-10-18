@@ -3,6 +3,9 @@ import { ROUND, PBL_IF_COLOR_ELSE, PBL_IF_ROUND_ELSE, ACTION_BAR_WIDTH, GColor, 
 import View from "piu/View";
 
 export const DIALOG_CHOICE_WINDOW_MESSAGE = "Set as default?";
+// The label's band at the bottom, which the icon's bounds are inset by (the C
+// code's label top of 112 is 168 - 56 on the original screen).
+const LABEL_HEIGHT = 56;
 
 const labelStyle = textLayerStyle(FONT_KEY.GOTHIC_24_BOLD, GColor.Black, "center");
 
@@ -48,10 +51,10 @@ const DialogChoiceContainer = Container.template($ => ({
 	contents: [
 		// The icon, centred in the bounds inset {top 7, right 28, bottom 56, left 14} (a BitmapLayer
 		// aligns centre, rounding down; Piu would round the vertical centre up).
-		Container($, { left: 14, top: 7, right: 28, bottom: 56, contents: [
-			Content($, { top: (screen.height - 7 - 56 - $.confirmSkin.height) >> 1, skin: $.confirmSkin }),
+		Container($, { left: 14, top: 7, right: 28, bottom: LABEL_HEIGHT, contents: [
+			Content($, { top: (screen.height - 7 - LABEL_HEIGHT - $.confirmSkin.height) >> 1, skin: $.confirmSkin }),
 		] }),
-		Label($, { left: ACTION_BAR_WIDTH >> 1, right: ACTION_BAR_WIDTH, top: 112, bottom: 0, style: labelStyle, string: DIALOG_CHOICE_WINDOW_MESSAGE }),
+		Label($, { left: ACTION_BAR_WIDTH >> 1, right: ACTION_BAR_WIDTH, top: screen.height - LABEL_HEIGHT, bottom: 0, style: labelStyle, string: DIALOG_CHOICE_WINDOW_MESSAGE }),
 		// The action bar with the tick on Up and the cross on Down.
 		ROUND
 			? Port($, { left: 0, right: 0, top: 0, bottom: 0, Behavior: RoundActionBarBehavior })

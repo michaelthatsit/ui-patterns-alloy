@@ -27,14 +27,13 @@ const checkboxList = {
 	},
 };
 
-// Radio button list
+// Radio button list: the choice persists the same way.
 const RADIO_BUTTON_WINDOW_NUM_ROWS = 4;
-let radioSelection = 0;
 const radioList = {
 	items: Array.from({ length: RADIO_BUTTON_WINDOW_NUM_ROWS }, (_, i) => `Choice ${i}`),
-	get choice() { return radioSelection; },
+	choice: 0,
 	onChange(index) {
-		radioSelection = index;
+		radioList.choice = index;
 	},
 	onSubmit(choice) {
 		// Do something with user choice

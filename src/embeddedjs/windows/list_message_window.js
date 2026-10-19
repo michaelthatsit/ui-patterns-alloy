@@ -1,6 +1,7 @@
 // Example implementation of the list menu UI pattern: a menu in the top 150 px
-// and a hint under it (a TextLayer with its default font, on white).
-import { GColor, TEXT_LAYER_DEFAULT_FONT, textLayerStyle, solidSkin } from "pebble-ui/sdk";
+// and a hint under it (a TextLayer with its default font, Gothic 18 Bold on
+// these displays, on white).
+import { GColor, FONT_KEY, textLayerStyle, solidSkin } from "pebble-ui/sdk";
 import Menu from "pebble-ui/Menu";
 import View from "pebble-ui/View";
 
@@ -10,7 +11,7 @@ const LIST_MESSAGE_WINDOW_MENU_HEIGHT = LIST_MESSAGE_WINDOW_NUM_ROWS * LIST_MESS
 const LIST_MESSAGE_WINDOW_HINT_TEXT = "Your list items";
 
 const whiteSkin = solidSkin(GColor.White);
-const hintStyle = textLayerStyle(TEXT_LAYER_DEFAULT_FONT, GColor.Black, "center");
+const hintStyle = textLayerStyle(FONT_KEY.GOTHIC_18_BOLD, GColor.Black, "center");
 
 class ListMessageBehavior extends View.Behavior {
 	// The menu takes the buttons.

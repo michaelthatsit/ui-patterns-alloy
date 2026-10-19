@@ -12,56 +12,48 @@ const DISTANCE = TEXT_ANIMATION_WINDOW_DISTANCE;
 const texts = ["Some example text", "Some more example text"];
 const textStyle = textLayerStyle(FONT_KEY.GOTHIC_24_BOLD, GColor.White, "center");
 
-// The shake: the text slides left by DISTANCE (out), changes, and slides in
-// from DISTANCE right of its place (in); ease in-out, 40 ms each.
-class TextBehavior extends Behavior {
-	onCreate(label) {
-		this.currentText = 0;
-		this.phase = 0;
-	}
-	shake(label) {
-		this.phase = 0;
-		label.duration = DURATION;
-		label.time = 0;
-		label.start();
-	}
-	onTimeChanged(label) {
-		const moved = Math.round(DISTANCE * Math.quadEaseInOut(label.fraction));
-		label.x = label.container.x + (this.phase === 0 ? -moved : DISTANCE - moved);
-	}
-	onFinished(label) {
-		if (this.phase === 0) {
-			this.currentText += (this.currentText === 0) ? 1 : -1;
-			label.string = texts[this.currentText];
-			label.x = label.container.x + DISTANCE;
-			this.phase = 1;
-			label.time = 0;
-			label.start();
-		}
-		else
-			label.x = label.container.x;
-	}
-}
-
+// The shake, every second: the text slides left by DISTANCE (out), changes,
+// and slides in from DISTANCE right of its place (in); ease in-out, 40 ms each.
 class TextAnimationBehavior extends View.Behavior {
 	onDisplaying(container) {
-		this.animate(container);
-		this.timer = Timer.repeat(() => this.animate(container), TEXT_ANIMATION_WINDOW_INTERVAL);
+		this.currentText = 0;
+		this.shake(container);
+		this.timer = Timer.repeat(() => this.shake(container), TEXT_ANIMATION_WINDOW_INTERVAL);
 	}
 	onUndisplaying(container) {
 		Timer.clear(this.timer);
-		container.first.stop();
+		container.stop();
 		super.onUndisplaying(container);
 	}
-	animate(container) {
-		container.first.delegate("shake");
+	shake(container) {
+		this.phase = 0;
+		container.duration = DURATION;
+		container.time = 0;
+		container.start();
+	}
+	onTimeChanged(container) {
+		const moved = Math.round(DISTANCE * Math.quadEaseInOut(container.fraction));
+		container.first.x = container.x + (this.phase === 0 ? -moved : DISTANCE - moved);
+	}
+	onFinished(container) {
+		const label = container.first;
+		if (this.phase === 0) {
+			this.currentText += (this.currentText === 0) ? 1 : -1;
+			label.string = texts[this.currentText];
+			label.x = container.x + DISTANCE;
+			this.phase = 1;
+			container.time = 0;
+			container.start();
+		}
+		else
+			label.x = container.x;
 	}
 }
 
 const TextAnimationContainer = Container.template($ => ({
 	skin: solidSkin(PBL_IF_COLOR_ELSE(GColor.BlueMoon, GColor.Black)), Behavior: $.constructor.Behavior,
 	contents: [
-		Label($, { left: 0, right: 0, top: (screen.height >> 1) - 24, bottom: 0, style: textStyle, string: "Example text.", Behavior: TextBehavior }),
+		Label($, { left: 0, right: 0, top: (screen.height >> 1) - 24, bottom: 0, style: textStyle, string: "Example text." }),
 	],
 }));
 

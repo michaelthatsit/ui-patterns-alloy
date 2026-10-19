@@ -1,11 +1,11 @@
 // Example text change animation implementation.
-import { PBL_IF_COLOR_ELSE, GColor, FONT_KEY, textLayerStyle } from "assets";
+import { PBL_IF_COLOR_ELSE, GColor, FONT_KEY, textLayerStyle, solidSkin } from "pebble-ui/sdk";
 import Timer from "timer";
-import View from "piu/View";
+import View from "pebble-ui/View";
 
-export const TEXT_ANIMATION_WINDOW_DURATION = 40;   // Duration of each half of the animation
-export const TEXT_ANIMATION_WINDOW_DISTANCE = 5;    // Pixels the animating text move by
-export const TEXT_ANIMATION_WINDOW_INTERVAL = 1000; // Interval between timers
+const TEXT_ANIMATION_WINDOW_DURATION = 40;   // Duration of each half of the animation
+const TEXT_ANIMATION_WINDOW_DISTANCE = 5;    // Pixels the animating text move by
+const TEXT_ANIMATION_WINDOW_INTERVAL = 1000; // Interval between timers
 
 const DURATION = TEXT_ANIMATION_WINDOW_DURATION;
 const DISTANCE = TEXT_ANIMATION_WINDOW_DISTANCE;
@@ -59,7 +59,7 @@ class TextAnimationBehavior extends View.Behavior {
 }
 
 const TextAnimationContainer = Container.template($ => ({
-	skin: new Skin({ fill: PBL_IF_COLOR_ELSE(GColor.BlueMoon, GColor.Black) }), Behavior: $.constructor.Behavior,
+	skin: solidSkin(PBL_IF_COLOR_ELSE(GColor.BlueMoon, GColor.Black)), Behavior: $.constructor.Behavior,
 	contents: [
 		Label($, { left: 0, right: 0, top: (screen.height >> 1) - 24, bottom: 0, style: textStyle, string: "Example text.", Behavior: TextBehavior }),
 	],

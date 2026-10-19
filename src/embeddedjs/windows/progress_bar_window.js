@@ -1,11 +1,11 @@
-// Example progress bar implementation.
-import { PBL_IF_COLOR_ELSE, STATUS_BAR_LAYER_HEIGHT, GColor, skins } from "assets";
-import { StatusBar } from "StatusBar";
+// Example progress bar implementation: a one pixel line under the status bar.
+import { PBL_IF_COLOR_ELSE, STATUS_BAR_LAYER_HEIGHT, GColor, solidSkin } from "pebble-ui/sdk";
+import { StatusBar } from "pebble-ui/StatusBar";
 import Timer from "timer";
-import View from "piu/View";
+import View from "pebble-ui/View";
 
-export const PROGRESS_BAR_WINDOW_SIZE = { w: screen.width, h: 1 }; // System default (144 in the C code: the original screen's width)
-export const PROGRESS_BAR_WINDOW_DELTA = 33;
+const PROGRESS_BAR_WINDOW_SIZE = { w: screen.width, h: 1 }; // System default (144 in the C code: the original screen's width)
+const PROGRESS_BAR_WINDOW_DELTA = 33;
 
 class ProgressBarBehavior extends View.Behavior {
 	// window_appear
@@ -30,10 +30,10 @@ class ProgressBarBehavior extends View.Behavior {
 }
 
 const ProgressBarContainer = Container.template($ => ({
-	skin: new Skin({ fill: PBL_IF_COLOR_ELSE(GColor.DarkCandyAppleRed, GColor.Black) }), Behavior: $.constructor.Behavior,
+	skin: solidSkin(PBL_IF_COLOR_ELSE(GColor.DarkCandyAppleRed, GColor.Black)), Behavior: $.constructor.Behavior,
 	contents: [
 		StatusBar({ color: GColor.White, dotted: true }),
-		Content($, { left: 0, top: STATUS_BAR_LAYER_HEIGHT - 2, width: 1, height: PROGRESS_BAR_WINDOW_SIZE.h, skin: skins.white }),
+		Content($, { left: 0, top: STATUS_BAR_LAYER_HEIGHT - 2, width: 1, height: PROGRESS_BAR_WINDOW_SIZE.h, skin: solidSkin(GColor.White) }),
 	],
 }));
 

@@ -1,14 +1,13 @@
-// UI Patterns, after pebble-examples/ui-patterns, in Alloy (Piu). The
-// controller keeps the window stack; each window is a module under windows/.
-import Controller from "piu/Controller";
-
-globalThis.controller = new Controller;
+// UI Patterns, after pebble-examples/ui-patterns, on pebble-ui (Piu). The
+// window stack is the application's behavior; each window is a module under
+// windows/, opened from the main menu by name.
+import WindowStack from "pebble-ui/WindowStack";
 
 const UIPatternsApplication = Application.template($ => ({
-	behavior: globalThis.controller,
+	behavior: new WindowStack,
 }));
 
 export default new UIPatternsApplication(
-	{ home: { View: "main_window" } },
-	{ commandListLength: 2048, displayListLength: 2048, touchCount: 0, pixels: screen.width * 4 },
+	{ View: "main_window" },
+	{ commandListLength: 1024, displayListLength: 1024, touchCount: 0, pixels: screen.width * 4 },
 );

@@ -1,7 +1,9 @@
 # ui-patterns-alloy
 
 [pebble-examples/ui-patterns](https://github.com/pebble-examples/ui-patterns)
-recreated one-to-one in Alloy (JavaScript on the watch, Piu UI). Run the app,
+recreated one-to-one in Alloy (JavaScript on the watch, Piu UI), on
+[pebble-ui](https://github.com/michaelthatsit/pebble-ui), the library that grew
+out of it. Run the app,
 then choose a menu option to see one of the recommended Pebble UI patterns:
 checkbox list, choice dialog, message dialog, list with a hint, radio button
 list, PIN entry, text animation, progress bar, progress layer, app config
@@ -65,26 +67,30 @@ covers the last row the same way.
 ## Layout
 
 ```
+pebble-ui/                         the library (git submodule): menus, status bar, action bar, dialogs, PIN entry, window stack
 src/c/mdbl.c                       the JavaScript machine (heap sizes below)
-src/embeddedjs/main.js             the application and its controller
-src/embeddedjs/assets.js           SDK defines, resource IDs, colours, fonts
-src/embeddedjs/modules/
-  piuController.js                 the window stack: goTo / goBack with slide transitions
-  piuView.js                       the View base class (a window) and the transition
-  Menu.js                          MenuLayer: cells, highlight, scrolling, round cells
-  StatusBar.js                     StatusBarLayer, with the dotted separator
-src/embeddedjs/layers/
-  progress_layer.js                ProgressLayer
-  selection_layer.js               SelectionLayer (the PIN cells, bump and slide animations)
-src/embeddedjs/windows/            one module per C window, same names
+src/embeddedjs/main.js             the application: a pebble-ui WindowStack
+src/embeddedjs/assets.js           resource IDs
+src/embeddedjs/windows/
+  main_window.js                   the menu; six of the ten patterns are pebble-ui windows opened with their data
+  list_message_window.js           a menu over a hint
+  text_animation_window.js         the text change animation
+  progress_bar_window.js           a line under the status bar
+  progress_layer_window.js         pebble-ui's ProgressLayer on a timer
 resources/images/                  the C project's bitmaps, same resource order
 screenshots/{emery,gabbro}/        this app in the emulators
 ```
 
-Each window module exports a View subclass: its `Template` builds the screen,
-its `Behavior` handles the buttons. The main menu opens a window with
-`controller.goTo("<module>")`; Back pops it, and on the main menu Back is left
-unhandled so the firmware closes the app, as the C app does.
+Checkbox list, radio button list, the three dialogs and PIN entry are
+`CheckboxList`, `RadioList`, `ChoiceDialog`, `MessageDialog`, `ConfigDialog`
+and `PinWindow` from pebble-ui, with the C example's strings and resources as
+their data (`main_window.js`). The other four windows are patterns of their own
+and have a module each: a View subclass whose `Template` builds the screen and
+whose `Behavior` handles the buttons. Back pops a window, and on the main menu
+Back is left unhandled so the firmware closes the app, as the C app does.
+
+Clone with the submodule: `git clone --recurse-submodules`, or `git submodule
+update --init` after the fact.
 
 ## Building and running
 
@@ -100,14 +106,17 @@ pebble install --phone <ip>
 ## Memory
 
 The JavaScript machine runs with `stack 5120, slot 45056, chunk 21504`
-(`src/c/mdbl.c`, mirrored in `src/embeddedjs/manifest.json`). The template's
-default 32 kB machine aborts at launch with `memory full`, and a 43008 slot
-ran out after all ten windows had been visited (each imported module stays
-resident). In the emulator the compiled JavaScript (`build/mods/emery/mc.xsa`,
-41.8 kB) is copied into the app heap as well: with a 23552 chunk the launch
-failed with `fxMapArchive failed`, so the chunk gave 2 kB to the slot heap.
-Bitmaps are loaded per window instance, not per module, so only the open
-windows' GBitmaps are in the heap.
+(`src/c/mdbl.c`, mirrored in `src/embeddedjs/manifest.json`); the Piu display
+and command lists are 1024 bytes each (`main.js`). In the emulator the compiled
+JavaScript (`build/mods/emery/mc.xsa`, 42.2 kB) is copied into the same 122 kB
+app heap as those pools, and this app, which opens every widget the library has,
+sits within a kilobyte of it: a bigger slot heap stopped the archive from
+mapping (`fxMapArchive failed`), a smaller one ran out after the tenth window
+(every imported module stays resident), the default 32 kB machine aborts at
+launch, a 4096 stack overflows, and a 20480 chunk heap fails on the last dialog.
+On the watch the archive is read from flash, so there is 40 kB more room than
+here. Bitmaps are loaded per window instance, so only the open windows' GBitmaps
+are in the heap.
 
 ## Piu on Pebble, as found here
 

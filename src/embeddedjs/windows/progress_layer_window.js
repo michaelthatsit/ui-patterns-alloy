@@ -1,10 +1,10 @@
-import { PBL_IF_COLOR_ELSE, GColor } from "assets";
-import { ProgressLayer } from "progress_layer";
+import { PBL_IF_COLOR_ELSE, GColor, solidSkin } from "pebble-ui/sdk";
+import { ProgressLayer } from "pebble-ui/ProgressLayer";
 import Timer from "timer";
-import View from "piu/View";
+import View from "pebble-ui/View";
 
-export const PROGRESS_LAYER_WINDOW_DELTA = 33;
-export const PROGRESS_LAYER_WINDOW_WIDTH = 80;
+const PROGRESS_LAYER_WINDOW_DELTA = 33;
+const PROGRESS_LAYER_WINDOW_WIDTH = 80;
 
 class ProgressLayerWindowBehavior extends View.Behavior {
 	// window_appear
@@ -23,7 +23,7 @@ class ProgressLayerWindowBehavior extends View.Behavior {
 }
 
 const ProgressLayerContainer = Container.template($ => ({
-	skin: new Skin({ fill: PBL_IF_COLOR_ELSE(GColor.LightGray, GColor.White) }), Behavior: $.constructor.Behavior,
+	skin: solidSkin(PBL_IF_COLOR_ELSE(GColor.LightGray, GColor.White)), Behavior: $.constructor.Behavior,
 	contents: [
 		ProgressLayer({
 			width: PROGRESS_LAYER_WINDOW_WIDTH, progress: 0, cornerRadius: 2,
